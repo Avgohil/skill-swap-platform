@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+  
+  .gradient-primary {
+    background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+  }
+  
+  .gradient-secondary {
+    background: linear-gradient(135deg, #14B8A6 0%, #06B6D4 100%);
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-xl;
+  }
+  
+  .skill-card {
+    @apply bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/30 transition-all duration-300 hover:bg-white/95 hover:shadow-xl hover:-translate-y-1;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Smooth scrolling for better UX with animations */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Enhance 3D performance */
+canvas {
+  display: block;
+  outline: none;
+}

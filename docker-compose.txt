@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:6
+    container_name: skill_swap_mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: skill_swap_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - skill_swap_network
+
+  # Redis (for caching and sessions)
+  redis:
+    image: redis:7-alpine
+    container_name: skill_swap_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - skill_swap_network
+
+  # Backend API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: skill_swap_api
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+      - redis
+    environment:
+      DATABASE_URL: mongodb://admin:password123@mongodb:27017/skill_swap_db?authSource=admin
+      JWT_SECRET: your-super-secret-jwt-key-here-change-in-production
+      PORT: 3001
+      NODE_ENV: production
+      FRONTEND_URL: http://localhost:5173
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./uploads:/app/uploads
+    networks:
+      - skill_swap_network
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  skill_swap_network:
+    driver: bridge
